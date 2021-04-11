@@ -10,28 +10,28 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView result;
-    TextView operation;
-    EditText number;
-    String lastOperation = "=";
-    Double operand = null;
+    TextView mResult;
+    TextView mOperation;
+    EditText mNumber;
+    String mLastOperation = "=";
+    Double mOperand = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        result =(TextView) findViewById(R.id.result);
-        operation = (TextView) findViewById(R.id.operation);
-        number = (EditText) findViewById(R.id.number);
+        mResult =(TextView) findViewById(R.id.result);
+        mOperation = (TextView) findViewById(R.id.operation);
+        mNumber = (EditText) findViewById(R.id.number);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
-        outState.putString("OPERATION", lastOperation);
-        if(operand!=null)
-            outState.putDouble("OPERAND", operand);
+        outState.putString("OPERATION", mLastOperation);
+        if(mOperand !=null)
+            outState.putDouble("OPERAND", mOperand);
         super.onSaveInstanceState(outState);
     }
 
@@ -39,27 +39,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
         super.onRestoreInstanceState(savedInstanceState);
-        lastOperation = savedInstanceState.getString("OPERATION");
-        operand= savedInstanceState.getDouble("OPERAND");
-        result.setText(operand.toString());
-        operation.setText(lastOperation);
+        mLastOperation = savedInstanceState.getString("OPERATION");
+        mOperand = savedInstanceState.getDouble("OPERAND");
+        mResult.setText(mOperand.toString());
+        mOperation.setText(mLastOperation);
     }
 
     public void onNumberClick(View view)
     {
 
         Button button = (Button)view;
-        number.append(button.getText());
+        mNumber.append(button.getText());
 
-        if(lastOperation.equals("=") && operand!=null){
-            operand = null;
+        if(mLastOperation.equals("=") && mOperand !=null){
+            mOperand = null;
         }
     }
 
     public void onOperationClick(View view)
     {
         Button button = (Button)view;
-        String number = this.number.getText().toString();
+        String number = this.mNumber.getText().toString();
         String op = button.getText().toString();
         if (number.length() > 0)
         {
@@ -69,53 +69,53 @@ public class MainActivity extends AppCompatActivity {
                 performOperation(Double.valueOf(number), op);
             }   catch (NumberFormatException ex)
             {
-                this.number.setText("");
+                this.mNumber.setText("");
             }
 
-            lastOperation = op;
-            operation.setText(lastOperation);
+            mLastOperation = op;
+            mOperation.setText(mLastOperation);
         }
     }
 
     private void performOperation(Double number, String operation)
     {
-        if(operand == null)
+        if(mOperand == null)
         {
-            operand = number;
+            mOperand = number;
         }
         else
         {
-            if(lastOperation.equals("="))
+            if(mLastOperation.equals("="))
             {
-                lastOperation = operation;
+                mLastOperation = operation;
             }
-            switch (lastOperation)
+            switch (mLastOperation)
             {
                 case "=":
-                    operand = number;
+                    mOperand = number;
                     break;
                 case "/":
                     if (number == 0)
                     {
-                        operand = 0.0;
+                        mOperand = 0.0;
                     }
                     else
                     {
-                        operand /= number;
+                        mOperand /= number;
                     }
                     break;
                 case "*":
-                    operand *= number;
+                    mOperand *= number;
                     break;
                 case "+":
-                    operand += number;
+                    mOperand += number;
                     break;
                 case "-":
-                    operand -= number;
+                    mOperand -= number;
                     break;
             }
         }
-        result.setText(operand.toString().replace('.', ','));
-        this.number.setText("");
+        mResult.setText(mOperand.toString().replace('.', ','));
+        this.mNumber.setText("");
     }
 }
